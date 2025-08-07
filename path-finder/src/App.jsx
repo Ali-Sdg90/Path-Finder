@@ -1,10 +1,12 @@
 import React from "react";
+import StoreProvider from "./store/StoreProvider";
+import Base from "./components/Base";
 
 const App = () => {
     return (
-        <div>
-            <h1>Aloha :)</h1>
-        </div>
+        <StoreProvider>
+            <Base/>
+        </StoreProvider>
     );
 };
 

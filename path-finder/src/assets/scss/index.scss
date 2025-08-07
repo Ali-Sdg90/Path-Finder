@@ -1,0 +1,13 @@
+@import "../fonts/fonts";
+@import "./components/all";
+@import "./pages/all";
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}

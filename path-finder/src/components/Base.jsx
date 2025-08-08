@@ -7,66 +7,66 @@ const Base = () => {
 
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-    const handleCellClick = async (x, y) => {
-        if (baseData[y][x] === 1) {
-            console.log(`Denied >> (${x}, ${y})`);
+    const fillCell = async (x, y, data) => {
+        if (
+            y < 0 ||
+            y >= data.length ||
+            x < 0 ||
+            x >= data[0].length ||
+            data[y][x] === 1 ||
+            data[y][x] === 2
+        ) {
             return;
         }
 
-        console.clear();
-        console.log(`Click >> (${x}, ${y})`);
+        data[y][x] = 1;
+        setBaseData(data.map((row) => [...row]));
+        await sleep(0);
 
-        let currentX = x;
-        let currentY = y;
+        const directions = weightedDirections({
+            right: 20,
+            left: 1,
+            down: 20,
+            up: 1,
+        });
 
-        for (
-            let pointerDirection = 0;
-            pointerDirection < 2;
-            pointerDirection++
-        ) {
-            for (
-                let pointerLocation = -1;
-                pointerLocation < 2;
-                pointerLocation += 2
-            ) {
-                setBaseData((prev) => {
-                    const newState = prev.map((row) => [...row]);
+        function weightedDirections(weights) {
+            const dirMap = {
+                right: [1, 0],
+                left: [-1, 0],
+                down: [0, 1],
+                up: [0, -1],
+            };
 
-                    let newX = currentX;
-                    let newY = currentY;
-
-                    if (pointerDirection) {
-                        newX += pointerLocation;
-                    } else {
-                        newY += pointerLocation;
-                    }
-
-                    if (newState[newY][newX] === 1) {
-                        console.log(`>> Break >> (${newX}, ${newY})`);
-                        return prev;
-                    }
-
-                    console.log(`Update >> (${newX}, ${newY})`);
-                    newState[newY][newX] = 1;
-
-                    console.log(pointerDirection, pointerLocation);
-
-                    return newState;
-                });
-
-                await sleep(200);
-            }
+            return Object.entries(weights).flatMap(([key, count]) =>
+                Array(count).fill(dirMap[key])
+            );
         }
 
-        console.log("Finished path");
+        for (let [dx, dy] of shuffleArray(directions)) {
+            await fillCell(x + dx, y + dy, data);
+        }
+    };
 
-        // await handleCellClick(5, 5);
+    const shuffleArray = (array) => {
+        const arr = [...array];
+
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+
+        return arr;
+    };
+
+    const handleCellClick = (x, y) => {
+        const dataCopy = baseData.map((row) => [...row]);
+        fillCell(x, y, dataCopy);
     };
 
     return (
         <div>
             <h1>Base Component</h1>
-
             <div className="base-container">
                 {baseData.map((row, rowIndex) => (
                     <div key={rowIndex} className="base-row">
@@ -75,7 +75,6 @@ const Base = () => {
                                 key={cellIndex}
                                 xValue={cellIndex}
                                 yValue={rowIndex}
-                                isActive={cell === 1}
                                 handleCellClick={handleCellClick}
                             />
                         ))}

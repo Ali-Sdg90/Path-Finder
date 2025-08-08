@@ -1,49 +1,14 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 
-import { BaseContext } from "./../store/BaseContextProvider";
-
-const Cell = ({ xValue, yValue }) => {
-    const { baseData, setBaseData } = useContext(BaseContext);
-
-    useEffect(() => {
-        if (baseData[yValue][xValue] === 1) {
-            console.log(`Cell at (${xValue}, ${yValue}) is now active.`);
-
-            cellPress();
-        }
-    }, [baseData[yValue][xValue]]);
-
-    const cellPress = () => {
-        if (baseData[yValue][xValue] === 1) {
-            console.log(`Cell at (${xValue}, ${yValue}) is already active.`);
-            return;
-        }
-
-        console.log(`Cell clicked at: (${xValue}, ${yValue})`);
-
-        setBaseData((prevState) => {
-            const newState = prevState.map((row) => [...row]);
-            newState[yValue][xValue] = 1;
-            return newState;
-        });
-
-        setTimeout(() => {
-            setBaseData((prevState) => {
-                const newState = prevState.map((row) => [...row]);
-                newState[yValue][xValue + 1] = 1;
-
-                console.log(`Cell at (${xValue + 1}, ${yValue}) activated.`);
-                return newState;
-            });
-        }, 200);
-    };
-
+const Cell = ({ xValue, yValue, isActive, handleCellClick }) => {
     return (
         <div
             className="base-cell"
-            onClick={cellPress}
+            onClick={() => {
+                handleCellClick(xValue, yValue);
+            }}
             style={
-                baseData[yValue][xValue] === 1
+                isActive
                     ? { backgroundColor: "blue" }
                     : { backgroundColor: "gray" }
             }

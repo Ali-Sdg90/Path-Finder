@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import { BaseContext } from "./../store/BaseContextProvider";
 import Cell from "./Cell";
+import Header from "./Header";
+import Footer from "./Footer";
 
 const Base = () => {
     const { baseData, setBaseData } = useContext(BaseContext);
@@ -66,21 +68,26 @@ const Base = () => {
 
     return (
         <div>
-            <h1>Base Component</h1>
+            <Header />
+
             <div className="base-container">
-                {baseData.map((row, rowIndex) => (
-                    <div key={rowIndex} className="base-row">
-                        {row.map((cell, cellIndex) => (
-                            <Cell
-                                key={cellIndex}
-                                xValue={cellIndex}
-                                yValue={rowIndex}
-                                handleCellClick={handleCellClick}
-                            />
-                        ))}
-                    </div>
-                ))}
+                <div className="base-box">
+                    {baseData.map((row, rowIndex) => (
+                        <div key={rowIndex} className="base-row">
+                            {row.map((cell, cellIndex) => (
+                                <Cell
+                                    key={cellIndex}
+                                    xValue={cellIndex}
+                                    yValue={rowIndex}
+                                    handleCellClick={handleCellClick}
+                                />
+                            ))}
+                        </div>
+                    ))}
+                </div>
             </div>
+
+            <Footer />
         </div>
     );
 };

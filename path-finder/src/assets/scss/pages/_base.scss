@@ -1,0 +1,41 @@
+.base-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .base-box {
+        display: inline-block;
+        border: 2px solid #333;
+
+        .base-row {
+            display: flex;
+
+            .cell {
+                height: min(0.83vh, 0.83vw);
+                width: min(0.83vh, 0.83vw);
+                border: 1px solid #cacaca;
+                background-color: white;
+                transition: background-color 0.2s;
+
+                &.wall {
+                    background-color: #222;
+                }
+
+                &.active {
+                    background-color: #4a90e2;
+
+                    animation: becomeSolid 4s ease-in-out 0s 1 normal forwards;
+                }
+            }
+        }
+    }
+}
+
+@keyframes becomeSolid {
+    0% {
+        background-color: #4a90e2;
+    }
+    100% {
+        background-color: #1769c7;
+    }
+}

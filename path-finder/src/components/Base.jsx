@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef } from "react";
 import { BaseContext } from "./../store/BaseContextProvider";
 import Cell from "./Cell";
 import Header from "./Header";
@@ -6,12 +6,19 @@ import Footer from "./Footer";
 import SiteSettings from "./SiteSettings";
 
 const Base = () => {
-    const { baseData, setBaseData } = useContext(BaseContext);
+    const { baseData, setBaseData, isClicked, setIsClicked } =
+        useContext(BaseContext);
+
+    const stopRef = useRef(false);
 
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    const [isClicked, setIsClicked] = useState(false);
 
     const fillCell = async (x, y, data) => {
+        if (stopRef.current) {
+            stopRef.current = false;
+            return;
+        }
+
         if (
             y < 0 ||
             y >= data.length ||
@@ -25,6 +32,7 @@ const Base = () => {
 
         data[y][x] = 1;
         setBaseData(data.map((row) => [...row]));
+
         await sleep(0);
 
         const directions = weightedDirections({
@@ -65,11 +73,17 @@ const Base = () => {
 
     const handleCellClick = (x, y) => {
         if (!isClicked) {
+            stopRef.current = false;
+
             const dataCopy = baseData.map((row) => [...row]);
             fillCell(x, y, dataCopy);
             setIsClicked(true);
         }
     };
+
+    // const stopFill = () => {
+    //     stopRef.current = true;
+    // };
 
     return (
         <div>

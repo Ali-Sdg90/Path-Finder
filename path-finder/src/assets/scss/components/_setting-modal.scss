@@ -1,0 +1,15 @@
+.settings-modal {
+    .ant-modal-title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.ant-float-btn-primary {
+    background-color: var(--color) !important;
+}
+
+.ant-float-btn-body {
+    background-color: unset !important;
+}

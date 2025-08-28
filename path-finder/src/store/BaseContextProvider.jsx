@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 
 export const BaseContext = createContext();
 
@@ -24,18 +24,40 @@ const generateRandomBase = (rows, cols, wallCount) => {
 const BaseContextProvider = ({ children }) => {
     const [baseSize, setBaseSize] = useState(100);
     const [wallCount, setWallCount] = useState(1400);
+    const [color, setColor] = useState("#4a90e2");
+    const [showBorders, setShowBorders] = useState(true);
+    const [isClicked, setIsClicked] = useState(false);
 
     const [baseData, setBaseData] = useState(() =>
         generateRandomBase(baseSize, baseSize, wallCount)
     );
 
-    useEffect(() => {
-        setBaseData(generateRandomBase(baseSize, baseSize, wallCount));
-    }, [baseSize, wallCount]);
+    const prevSize = useRef(baseSize);
+    const prevWall = useRef(wallCount);
 
     useEffect(() => {
-        // console.log("Base updated", baseData);
-    }, [baseData]);
+        document.documentElement.style.setProperty("--color", color);
+    }, [color]);
+
+    useEffect(() => {
+        document.documentElement.style.setProperty(
+            "--border",
+            showBorders ? "1px solid #ccc" : "none"
+        );
+    }, [showBorders]);
+
+    useEffect(() => {
+        if (prevSize.current === baseSize && prevWall.current === wallCount) {
+            return;
+        }
+
+        prevSize.current = baseSize;
+        prevWall.current = wallCount;
+
+        setIsClicked(false);
+
+        setBaseData(generateRandomBase(baseSize, baseSize, wallCount));
+    }, [baseSize, wallCount]);
 
     return (
         <BaseContext.Provider
@@ -46,6 +68,12 @@ const BaseContextProvider = ({ children }) => {
                 setBaseSize,
                 wallCount,
                 setWallCount,
+                color,
+                setColor,
+                showBorders,
+                setShowBorders,
+                isClicked,
+                setIsClicked,
             }}
         >
             {children}

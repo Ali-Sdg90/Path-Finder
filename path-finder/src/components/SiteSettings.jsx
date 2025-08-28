@@ -21,19 +21,17 @@ const { Title, Text } = Typography;
 
 export default function SiteSettings() {
     const [open, setOpen] = useState(false);
-    const [color, setColor] = useState("#4a90e2");
-    const [isEnabled, setIsEnabled] = useState(false);
 
-    const { baseSize, setBaseSize, wallCount, setWallCount } =
-        useContext(BaseContext);
-
-    // const handlePercentageChange = (value) => {
-    //     if (value < 10 || value > 80) {
-    //         message.warning("Value must be between 10% and 80%");
-    //     } else {
-    //         setPercentage(value);
-    //     }
-    // };
+    const {
+        baseSize,
+        setBaseSize,
+        wallCount,
+        setWallCount,
+        color,
+        setColor,
+        showBorders,
+        setShowBorders,
+    } = useContext(BaseContext);
 
     return (
         <ConfigProvider
@@ -44,12 +42,12 @@ export default function SiteSettings() {
             <FloatButton
                 icon={<SettingOutlined />}
                 type="primary"
-                style={{ right: 24, bottom: 24 }}
+                style={{ right: 24, bottom: 80 }}
                 onClick={() => setOpen(true)}
             />
 
             <Modal
-                title="Site Settings"
+                title="App Settings"
                 centered
                 open={open}
                 onCancel={() => setOpen(false)}
@@ -57,12 +55,13 @@ export default function SiteSettings() {
                 okText="Save"
                 cancelText="Close"
                 width={500}
+                className="settings-modal"
             >
                 <Form layout="vertical">
                     <Form.Item label={<Title level={5}>Color</Title>}>
                         <ColorPicker
                             value={color}
-                            onChange={(c) => setColor(c.toHexString())}
+                            onChangeComplete={(c) => setColor(c.toHexString())}
                             showText
                         />
                     </Form.Item>
@@ -73,10 +72,10 @@ export default function SiteSettings() {
                     >
                         <Space>
                             <Switch
-                                checked={isEnabled}
-                                onChange={setIsEnabled}
+                                checked={showBorders}
+                                onChange={setShowBorders}
                             />
-                            <Text>{isEnabled ? "Enabled" : "Disabled"}</Text>
+                            <Text>{showBorders ? "Enabled" : "Disabled"}</Text>
                         </Space>
                     </Form.Item>
                     <Divider />
@@ -87,7 +86,10 @@ export default function SiteSettings() {
                             max={100}
                             step={5}
                             value={baseSize}
-                            onChange={(value) => setBaseSize(value)}
+                            onChange={(value) => {
+                                setWallCount((14 / 100) * (value * value));
+                                setBaseSize(value);
+                            }}
                         />
                         <Text>Selected value: {baseSize}</Text>
                     </Form.Item>
@@ -106,7 +108,11 @@ export default function SiteSettings() {
                                 )}
                                 formatter={(value) => `${value}%`}
                                 parser={(value) => value.replace("%", "")}
-                                onChange={(value) => setWallCount(value / 100 * (baseSize * baseSize))}
+                                onChange={(value) =>
+                                    setWallCount(
+                                        (value / 100) * (baseSize * baseSize)
+                                    )
+                                }
                             />
                         </Space>
                     </Form.Item>

@@ -13,7 +13,7 @@
             .cell {
                 height: min(0.83vh, 0.83vw);
                 width: min(0.83vh, 0.83vw);
-                border: 1px solid #cacaca;
+                border: var(--border);
                 background-color: white;
                 transition: background-color 0.2s;
 
@@ -22,7 +22,7 @@
                 }
 
                 &.active {
-                    background-color: #4a90e2;
+                    background-color: var(--color);
 
                     animation: becomeSolid 4s ease-in-out 0s 1 normal forwards;
                 }
@@ -33,10 +33,9 @@
 
 @keyframes becomeSolid {
     0% {
-        background-color: #4a90e2;
+        filter: brightness(1);
     }
     100% {
-        background-color: #1769c7;
-        // filter: brightness(0.8);
+        filter: brightness(0.85);
     }
 }

@@ -1,13 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { BaseContext } from "./../store/BaseContextProvider";
 import Cell from "./Cell";
 import Header from "./Header";
 import Footer from "./Footer";
+import SiteSettings from "./SiteSettings";
 
 const Base = () => {
     const { baseData, setBaseData } = useContext(BaseContext);
 
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    const [isClicked, setIsClicked] = useState(false);
 
     const fillCell = async (x, y, data) => {
         if (
@@ -62,8 +64,11 @@ const Base = () => {
     };
 
     const handleCellClick = (x, y) => {
-        const dataCopy = baseData.map((row) => [...row]);
-        fillCell(x, y, dataCopy);
+        if (!isClicked) {
+            const dataCopy = baseData.map((row) => [...row]);
+            fillCell(x, y, dataCopy);
+            setIsClicked(true);
+        }
     };
 
     return (
@@ -86,6 +91,8 @@ const Base = () => {
                     ))}
                 </div>
             </div>
+
+            <SiteSettings />
 
             <Footer />
         </div>

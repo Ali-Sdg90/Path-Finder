@@ -22,16 +22,32 @@ const generateRandomBase = (rows, cols, wallCount) => {
 };
 
 const BaseContextProvider = ({ children }) => {
+    const [baseSize, setBaseSize] = useState(100);
+    const [wallCount, setWallCount] = useState(1400);
+
     const [baseData, setBaseData] = useState(() =>
-        generateRandomBase(100, 100, 1400)
+        generateRandomBase(baseSize, baseSize, wallCount)
     );
+
+    useEffect(() => {
+        setBaseData(generateRandomBase(baseSize, baseSize, wallCount));
+    }, [baseSize, wallCount]);
 
     useEffect(() => {
         // console.log("Base updated", baseData);
     }, [baseData]);
 
     return (
-        <BaseContext.Provider value={{ baseData, setBaseData }}>
+        <BaseContext.Provider
+            value={{
+                baseData,
+                setBaseData,
+                baseSize,
+                setBaseSize,
+                wallCount,
+                setWallCount,
+            }}
+        >
             {children}
         </BaseContext.Provider>
     );

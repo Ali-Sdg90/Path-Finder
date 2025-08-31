@@ -35,6 +35,8 @@ const BaseContextProvider = ({ children }) => {
     const prevSize = useRef(baseSize);
     const prevWall = useRef(wallCount);
 
+    const stopRef = useRef(false);
+
     useEffect(() => {
         document.documentElement.style.setProperty("--color", color);
     }, [color]);
@@ -54,9 +56,11 @@ const BaseContextProvider = ({ children }) => {
         prevSize.current = baseSize;
         prevWall.current = wallCount;
 
+        stopRef.current = true;
+
         setIsClicked(false);
 
-        setBaseData(generateRandomBase(baseSize, baseSize, wallCount));
+        setBaseData(() => generateRandomBase(baseSize, baseSize, wallCount));
     }, [baseSize, wallCount]);
 
     return (
@@ -74,6 +78,7 @@ const BaseContextProvider = ({ children }) => {
                 setShowBorders,
                 isClicked,
                 setIsClicked,
+                stopRef,
             }}
         >
             {children}

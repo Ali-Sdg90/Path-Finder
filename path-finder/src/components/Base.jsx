@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext } from "react";
 import { BaseContext } from "./../store/BaseContextProvider";
 import Cell from "./Cell";
 import Header from "./Header";
@@ -6,19 +6,19 @@ import Footer from "./Footer";
 import SiteSettings from "./SiteSettings";
 
 const Base = () => {
-    const { baseData, setBaseData, isClicked, setIsClicked } =
-        useContext(BaseContext);
-
-    const stopRef = useRef(false);
+    const {
+        baseData,
+        setBaseData,
+        isClicked,
+        setIsClicked,
+        stopRef,
+        baseSize,
+        wallCount,
+    } = useContext(BaseContext);
 
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-    const fillCell = async (x, y, data) => {
-        if (stopRef.current) {
-            stopRef.current = false;
-            return;
-        }
-
+    const fillCell = async (x, y, data, fillCellIndex, maxFillCells) => {
         if (
             y < 0 ||
             y >= data.length ||
@@ -27,6 +27,12 @@ const Base = () => {
             data[y][x] === 1 ||
             data[y][x] === 2
         ) {
+            return;
+        }
+
+        if (fillCellIndex++ >= maxFillCells) {
+            stopRef.current = true;
+            console.log("Stopped");
             return;
         }
 
@@ -56,18 +62,19 @@ const Base = () => {
         }
 
         for (let [dx, dy] of shuffleArray(directions)) {
-            await fillCell(x + dx, y + dy, data);
+            if (stopRef.current) {
+                return;
+            }
+            await fillCell(x + dx, y + dy, data, fillCellIndex, maxFillCells);
         }
     };
 
     const shuffleArray = (array) => {
         const arr = [...array];
-
         for (let i = arr.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [arr[i], arr[j]] = [arr[j], arr[i]];
         }
-
         return arr;
     };
 
@@ -76,14 +83,14 @@ const Base = () => {
             stopRef.current = false;
 
             const dataCopy = baseData.map((row) => [...row]);
-            fillCell(x, y, dataCopy);
+
+            const maxFillCells = baseSize * baseSize - wallCount;
+            let fillCellIndex = 0;
+
+            fillCell(x, y, dataCopy, fillCellIndex, maxFillCells);
             setIsClicked(true);
         }
     };
-
-    // const stopFill = () => {
-    //     stopRef.current = true;
-    // };
 
     return (
         <div>

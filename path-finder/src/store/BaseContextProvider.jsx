@@ -44,7 +44,7 @@ const BaseContextProvider = ({ children }) => {
     useEffect(() => {
         document.documentElement.style.setProperty(
             "--border",
-            showBorders ? "1px solid #ccc" : "none"
+            showBorders ? "1px solid #e0e0e0ff" : "none"
         );
     }, [showBorders]);
 

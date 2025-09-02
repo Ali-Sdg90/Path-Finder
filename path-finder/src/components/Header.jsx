@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CryptoJS from "crypto-js";
 
-const date = "1403-10-30";
+const date = "1403-10-30"; // 1404/06/11
 
 const Header = () => {
     const [EEClicked, setEEClicked] = useState([false, false]);

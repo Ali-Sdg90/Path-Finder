@@ -2,6 +2,11 @@
 
 An interactive sandbox for exploring pathfinding concepts—using weighted randomness to simulate algorithm-like behavior, filling the grid while favoring certain directions.
 
+| Example 1 | Example 2 |
+|-----------|-----------|
+| ![red (2)](https://github.com/user-attachments/assets/aec6ae51-2f0e-4fda-ad98-ccddf660560b) | ![blue - 2](https://github.com/user-attachments/assets/88e403af-d2f6-4d11-883a-ae9d53656d10) |
+
+
 ## Project Overview
 
 Path-Finder is a React-based web application that provides a visual sandbox for experimenting with pathfinding concepts. Instead of implementing exact algorithms, it uses weighted randomness to simulate algorithm-like behavior, allowing users to explore how paths can be discovered across a grid.
@@ -98,7 +103,6 @@ Path-Finder/
         │   └── StoreProvider.jsx          # Wraps app with context providers
         └── utils/                         # Utility functions
 ```
-
 ## Settings
 
 The settings modal (⚙️ icon) allows you to customize your experience:
@@ -109,6 +113,10 @@ The settings modal (⚙️ icon) allows you to customize your experience:
 | Wall Count   | Percentage of obstacles    | Adds or removes walls on the grid                  |
 | Cell Borders | Show or hide cell borders  | Toggles the visibility of cell borders             |
 | Line Color   | Color of the filling line  | Changes the color of the path/fill line in the app |
+
+| Example Screenshot |
+|--------------------|
+| <img src="https://github.com/user-attachments/assets/cf288670-aa73-4cc2-a290-1428139e345f" alt="Settings Modal Example"/> |
 
 ## Contribution Guidelines
 
